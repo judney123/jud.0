@@ -1,57 +1,79 @@
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.JRadioButton;
+import javax.swing.ButtonGroup;
 
-public class Eventoaula extends JFrame {
-    private JButton button;
+public class RadioButtonFrame extends JFrame{
     private JTextField textField;
-    private JTextArea textArea;
+    private Font plainFont;
+    private Font boldFont;
+    private Font italicFont;
+    private Font boldItalicFont;
+    private JRadioButton plainJRadioButton;
+    private JRadioButton boldJRadioButton;
+    private JRadioButton italicJRadioButton;
+    private JRadioButton boldItalicJRadioButton;
+    private ButtonGroup radioGroup;
 
-    public Eventoaula() {
-        setTitle("Eventoaula");
-        setSize(300, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public RadioButtonFrame (){
+        super( "RadioButton Test" );
+        setLayout( new FlowLayout());
+        textField = new JTextField ("Watch the font style change", 25 );
+        add(textField);
 
+        plainJRadioButton = new JRadioButton ("plain", true);
+        boldJRadioButton = new JRadioButton ("bold", false);
+        italicJRadioButton = new JRadioButton ("italic", false);
+        boldItalicJRadioButton = new JRadioButton ("Bold/Italic", false);
+        add(plainJRadioButton);
+        add(boldJRadioButton);
+        add(italicJRadioButton);
+        add(boldItalicJRadioButton);
 
-        button = new JButton("Exibir");
-        textField = new JTextField(10);
-        textArea = new JTextArea(5, 20);
+        radioGroup = new ButtonGroup();
+        radioGroup.add(plainJRadioButton);
+        radioGroup.add(boldJRadioButton);
+        radioGroup.add(italicJRadioButton);
+        radioGroup.add(boldItalicJRadioButton);
 
+        plainFont = new Font("Serif", Font.PLAIN, 14);
+        boldFont = new Font("Serif", Font.BOLD, 14);
+        italicFont = new Font("Serif", Font.ITALIC, 14);
+        boldItalicFont = new Font("Serif", Font.BOLD + Font.ITALIC, 14);
+        textField.setFont(plainFont);
 
-        JPanel panel = new JPanel();
-        panel.add(new JLabel("Digite algo:"));
-        panel.add(textField);
-        panel.add(button);
-
-        JScrollPane scrollPane = new JScrollPane(textArea);
-        panel.add(scrollPane);
-
-        add(panel);
-
-
-        button.addActionListener(new ButtonClickListener());
-
-        textField.addActionListener(new TextFieldEnterListener());
+        plainJRadioButton.addItemListener(
+                new RadioButtonHandler(plainFont));
+        boldJRadioButton.addItemListener(
+                new RadioButtonHandler(boldFont));
+        italicJRadioButton.addItemListener(
+                new RadioButtonHandler(italicFont));
+        boldItalicJRadioButton.addItemListener(
+                new RadioButtonHandler(boldItalicFont));
     }
+    private class RadioButtonHandler implements ItemListener{
+        private Font font;
 
+        public RadioButtonHandler(Font f){
 
-    class ButtonClickListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String text = textField.getText();
-            textArea.append(text + "\n");
-            textField.setText("");
+            font = f;
+        }
+        public void itemStateChanged(itemEvent event){
+            textField.setFont(font);
         }
     }
+}
+import javax.swing.JFrame;
 
-    class TextFieldEnterListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
-            String text = textField.getText();
-            textArea.append(text + "\n");
-            textField.setText("");
-        }
-    }
-
-    public static void main(String[] args) {
-        Eventoaula demo = new Eventoaula();
-        demo.setVisible(true);
+public class RadioButtonTest{
+    public static void main(String[] args){
+        RadioButtonFrame radioButtonFrame = new RadioButtonFrame();
+        radioButtonFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        radioButtonFrame.setSize(300,100);
+        radioButtonFrame.setVisible(true);
     }
 }
